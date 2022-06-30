@@ -1,0 +1,87 @@
+version: 2.1
+jobs:
+  lint:
+    docker:
+      - image: alpine:3.15
+    steps:
+      - checkout
+      - run:
+          name: Lint
+          command: |
+            apk add --update npm
+            npm ci
+            npm run lint
+  prepare-and-deploy:
+    docker:
+      - image: alpine:3.15
+    steps:
+      - checkout
+      - run:
+          name: Add env file
+          command: |
+            touch .env
+            echo PORT=$PORT >> .env
+            echo HOST==$HOST >> .env
+            ls -la
+      # - run:
+      #     command: |
+      #         source ~/.profile
+      #         eb --version
+      #     name: Installing deployment dependencies
+      #     working_directory: /
+      - run:
+          command: |
+              ls -la
+              mkdir ~/.aws
+              touch ~/.aws/config
+              chmod 600 ~/.aws/config
+              echo "[profile eb-cli]" > ~/.aws/config
+              echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/config
+              echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
+          name: Create AWS credentials from CircleCI environment variables
+      - run:
+          command: |
+              apk add git
+              git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
+          name: Clone eb install script repo
+      - run:
+          name: Install Python
+          command: |
+            apk update
+            apk add python3 py3-pip
+      - run:
+          command: |
+              python3 --version
+              pip install virtualenv
+              python3 aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
+              echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.profile && . ~/.profile
+              echo $PATH
+              apk add --update util-linux
+              whereis python3
+              ln -s /usr/bin/python3 /usr/bin/python
+              eb --version
+              ls -la
+              eb deploy
+          name: Install AWS and AWS EB CLIs
+      # - run:
+      #     name: Deploy
+      #     command: eb deploy
+
+  # deploy:
+  #   docker:
+  #     - image: alpine:3.15
+  #   steps:
+  #     - run:
+  #         name: Deploy
+  #         command: eb deploy
+  
+
+workflows:
+  workflow:
+    jobs:
+      - lint
+      - prepare-and-deploy:
+          context: cloudjourneys
+      # - deploy:
+      #     requires:
+      #         - prepare

@@ -1,0 +1,19 @@
+branch-defaults:
+  main:
+    environment: Cloudjourneys-env-1
+environment-defaults:
+  Cloudjourneys-env-1:
+    branch: null
+    repository: null
+global:
+  application_name: cloudjourneys
+  default_ec2_keyname: null
+  default_platform: Docker running on 64bit Amazon Linux 2.14.3
+  default_region: us-east-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  sc: git
+  workspace_type: Application
