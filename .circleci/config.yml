@@ -63,9 +63,16 @@ workflows:
   workflow:
     jobs:
       - lint
+      - hold:
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+                - refactor-ci
       - prepare-and-deploy:
           context: cloudjourneys
-          type: approval
+          requires: hold
           filters:
             branches:
               only:
