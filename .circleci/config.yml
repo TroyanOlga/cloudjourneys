@@ -11,7 +11,7 @@ jobs:
             apk add --update npm
             npm ci
             npm run lint
-  prepare-and-deploy:
+  prepare:
     docker:
       - image: alpine:3.15
     steps:
@@ -86,8 +86,8 @@ workflows:
   workflow:
     jobs:
       - lint
-      - prepare-and-deploy:
+      - prepare:
           context: cloudjourneys
-      # - deploy:
-      #     requires:
-      #         - prepare
+      - deploy:
+          requires:
+              - prepare
