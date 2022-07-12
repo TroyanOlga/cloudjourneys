@@ -22,16 +22,8 @@ jobs:
             touch .env
             echo PORT=$PORT >> .env
             echo HOST==$HOST >> .env
-            ls -la
-      # - run:
-      #     command: |
-      #         source ~/.profile
-      #         eb --version
-      #     name: Installing deployment dependencies
-      #     working_directory: /
       - run:
           command: |
-              ls -la
               mkdir ~/.aws
               touch ~/.aws/config
               chmod 600 ~/.aws/config
@@ -41,14 +33,13 @@ jobs:
           name: Create AWS credentials from CircleCI environment variables
       - run:
           command: |
-              apk add git
+              apk add --update git
               git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
           name: Clone eb install script repo
       - run:
           name: Install Python
           command: |
-            apk update
-            apk add python3 py3-pip
+            apk add --update python3 py3-pip
       - run:
           command: |
               python3 --version
@@ -57,10 +48,8 @@ jobs:
               echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.profile && . ~/.profile
               echo $PATH
               apk add --update util-linux
-              whereis python3
               ln -s /usr/bin/python3 /usr/bin/python
               eb --version
-              ls -la
           name: Install AWS and AWS EB CLIs
       # - run:
       #     name: Deploy
@@ -74,6 +63,7 @@ jobs:
     docker:
       - image: alpine:3.15
     steps:
+      - checkout
       - run:
           name: Deploy
           command: |
