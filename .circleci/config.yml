@@ -72,7 +72,8 @@ workflows:
                 - refactor-ci
       - prepare-and-deploy:
           context: cloudjourneys
-          requires: hold
+          requires:
+              - hold
           filters:
             branches:
               only:
