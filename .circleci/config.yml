@@ -65,7 +65,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-              echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.profile && . ~/.profile
+              . ~/.profile
               echo $PATH
               ls -la
               eb deploy Cloudjourneys-env-1
