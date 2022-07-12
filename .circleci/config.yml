@@ -61,11 +61,13 @@ jobs:
               ln -s /usr/bin/python3 /usr/bin/python
               eb --version
               ls -la
-              eb deploy
           name: Install AWS and AWS EB CLIs
-      # - run:
-      #     name: Deploy
-      #     command: eb deploy
+      - run:
+          name: Deploy
+          command: |
+              echo $PATH
+              ls -la
+              eb deploy
 
   # deploy:
   #   docker:
