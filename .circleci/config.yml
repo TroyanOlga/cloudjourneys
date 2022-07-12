@@ -11,7 +11,7 @@ jobs:
             apk add --update npm
             npm ci
             npm run lint
-  prepare:
+  prepare-and-deploy:
     docker:
       - image: alpine:3.15
     steps:
@@ -51,33 +51,23 @@ jobs:
               ln -s /usr/bin/python3 /usr/bin/python
               eb --version
           name: Install AWS and AWS EB CLIs
-      # - run:
-      #     name: Deploy
-      #     command: |
-      #         . ~/.profile
-      #         echo $PATH
-      #         ls -la
-      #         eb deploy Cloudjourneys-env-1
-
-  deploy:
-    docker:
-      - image: alpine:3.15
-    steps:
-      - checkout
       - run:
           name: Deploy
           command: |
-              echo 'export PATH="/root/.ebcli-virtual-env/executables:$PATH"' >> ~/.profile && . ~/.profile
+              . ~/.profile
               echo $PATH
               ls -la
-              eb deploy Cloudjourneys-env-1  
+              eb deploy Cloudjourneys-env-1
 
 workflows:
   workflow:
     jobs:
       - lint
-      - prepare:
+      - prepare-and-deploy:
           context: cloudjourneys
-      - deploy:
-          requires:
-              - prepare
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+                - refactor-ci
