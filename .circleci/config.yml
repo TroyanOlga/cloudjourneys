@@ -62,22 +62,25 @@ jobs:
               eb --version
               ls -la
           name: Install AWS and AWS EB CLIs
+      # - run:
+      #     name: Deploy
+      #     command: |
+      #         . ~/.profile
+      #         echo $PATH
+      #         ls -la
+      #         eb deploy Cloudjourneys-env-1
+
+  deploy:
+    docker:
+      - image: alpine:3.15
+    steps:
       - run:
           name: Deploy
           command: |
               . ~/.profile
               echo $PATH
               ls -la
-              eb deploy Cloudjourneys-env-1
-
-  # deploy:
-  #   docker:
-  #     - image: alpine:3.15
-  #   steps:
-  #     - run:
-  #         name: Deploy
-  #         command: eb deploy
-  
+              eb deploy Cloudjourneys-env-1  
 
 workflows:
   workflow:

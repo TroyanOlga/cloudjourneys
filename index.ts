@@ -5,7 +5,7 @@ const host = process.env.HOST;
 
 // define a route handler for the default home page
 app.get("/", (req, res) => {
-  res.send("Hello test world!");
+  res.send("Hello world!");
 });
 
 // start the Express server
