@@ -57,7 +57,7 @@ jobs:
               . ~/.profile
               echo $PATH
               ls -la
-              eb deploy Cloudjourneys-env-1
+              eb deploy Cloudjourneysvpc-env
 
 workflows:
   workflow:
