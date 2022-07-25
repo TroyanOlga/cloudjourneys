@@ -1,12 +1,12 @@
 branch-defaults:
   main:
-    environment: Cloudjourneys-env-1
+    environment: Cloudjourneysvpc-env
 environment-defaults:
-  Cloudjourneys-env-1:
+  Cloudjourneysvpc-env:
     branch: null
     repository: null
 global:
-  application_name: cloudjourneys
+  application_name: cloudjourneys-vpc
   default_ec2_keyname: null
   default_platform: Docker running on 64bit Amazon Linux 2.14.3
   default_region: us-east-1
